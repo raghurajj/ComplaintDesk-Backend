@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'djoser',
+    'Account',
+    'Complaint'
 ]
 
 MIDDLEWARE = [
@@ -66,7 +70,7 @@ TEMPLATES = [
         },
     },
 ]
-
+AUTH_USER_MODEL = "S142.User_info"
 WSGI_APPLICATION = 'ComplaintDesk.wsgi.application'
 
 
