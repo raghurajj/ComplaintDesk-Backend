@@ -75,8 +75,11 @@ WSGI_APPLICATION = 'ComplaintDesk.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME':'complaintdesk',
+        'HOST':'localhost:27017',
+        'USER':'raghu',
+        'PASSWORD':'complaintdesk'
     }
 }
 
