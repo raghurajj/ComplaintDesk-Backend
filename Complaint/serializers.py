@@ -4,5 +4,5 @@ from .models import Complaint
 class ComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
-        fields = ['author', 'Category', 'description', 'latitude', 'longitude']
+        fields = ['pk','author', 'Category', 'description', 'latitude', 'longitude']
 
