@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 SECRET_KEY = 'm0rbzu=9&+zsn-eppg)1%a4tm=1vf7-u8y1n=o6nhhim+16kc_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1','complaint-desk.herokuapp.com']
 
@@ -32,10 +32,14 @@ INSTALLED_APPS = [
     'djoser',
     'Account',
     'Complaint',
+    'social_django',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
+    'social_django.middleware.SocialAuthExceptionMiddlware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +63,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect'
             ],
         },
     },
@@ -81,6 +87,14 @@ DATABASES = {
         'HOST': 'localhost'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
@@ -129,7 +143,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -139,8 +152,17 @@ REST_FRAMEWORK = {
     ),
 }
 
+AUTHENTICATION_BACKENDS =(
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend'
+)
+
 SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',)
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_TOKEN_CLASSES':(
+        'rest_framework_simplejwt.tokens.AccessToken',
+    )
+
 }
 
 DJOSER = {
@@ -158,10 +180,16 @@ DJOSER = {
     'SERIALIZERS': {
         'user_create': 'Account.serializers.UserCreateSerializer',
         'user': 'Account.serializers.UserCreateSerializer',
+        'current_user':'Account.serializers.UserCreateSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
     },
 }
 
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '478638612428-sss3s9mo7d280skguchka622cm188ple.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '45DNgRUkrhVDNixpzAKCg8GP'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['https://www.googleapis.com/auth/userinfo.email','https://www.googleapis.com/auth/userinfo.profile','openid']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name','last_name']
 
 STATIC_URL = '/static/'
 
