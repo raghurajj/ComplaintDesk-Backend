@@ -7,9 +7,6 @@ class User_info_Manager(BaseUserManager):
         if not email:
             raise ValueError("Users must have an email.")
 
-        if not name:
-            raise ValueError("Users must have a name.")
-
         user = self.model(
             email = self.normalize_email(email),
             **extraa_fields,
